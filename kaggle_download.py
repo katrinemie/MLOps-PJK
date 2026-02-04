@@ -1,6 +1,11 @@
 import kagglehub
+import shutil
+from pathlib import Path
 
-# Download latest version
 path = kagglehub.dataset_download("shaunthesheep/microsoft-catsvsdogs-dataset")
 
-print("Path to dataset files:", path)
+dest = Path("data")
+dest.mkdir(exist_ok=True)
+shutil.copytree(path, dest, dirs_exist_ok=True)
+
+print("Dataset downloaded to:", dest)
