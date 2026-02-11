@@ -10,12 +10,14 @@
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
+CONTAINER=/ceph/container/pytorch/pytorch_26.01.sif
+
 mkdir -p logs models
 
 # Pull data fra DVC
-singularity exec --nv singularity/pytorch.sif \
-    dvc pull
+pip install --user dvc[s3]
+dvc pull
 
-# Kør træning
-singularity exec --nv singularity/pytorch.sif \
+# Kør træning i container
+srun singularity exec --nv "$CONTAINER" \
     bash -c "PYTHONPATH='$ROOT/src' python -m train --config configs/config.yaml $*"
