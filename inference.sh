@@ -10,7 +10,9 @@
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
+CONTAINER=/ceph/container/pytorch/pytorch_26.01.sif
+
 mkdir -p logs
 
-singularity exec --nv singularity/pytorch.sif \
+srun singularity exec --nv "$CONTAINER" \
     bash -c "PYTHONPATH='$ROOT/src' python -m inference --model models/best_model.pt $*"
