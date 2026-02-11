@@ -1,6 +1,8 @@
 # Data
 creditcard.csv
-/data
+/data/*
+!/data/*.dvc
+!/data/.gitignore
 
 # Virtual environment
 .venv
