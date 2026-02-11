@@ -90,3 +90,8 @@ Fælles login
 Username and password for all nodes: daki/daki
 * pwd: dakiminio (til MinIO)
 
+Login
+Konto	Brugernavn	Password	Brug til
+Admin	daki,	daki,	SSH, Jenkins
+MinIO	daki,	dakiminio,	MinIO UI, DVC
+Gruppe	daki4-26-gr3,	daki,	SSH (gruppebruger)
