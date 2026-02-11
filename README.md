@@ -40,9 +40,10 @@ MLOps-PJK/
 ├── configs/
 │   └── config.yaml           # Alle hyperparametre (YAML)
 ├── src/
+│   ├── __init__.py
 │   ├── data_loader.py        # Dataset klasse, augmentering, splits
 │   ├── model.py              # ResNet18 definition + save/load
-│   ├── train.py              # Traeningsloop
+│   ├── train.py              # Traeningsloop med checkpointing
 │   └── evaluate.py           # Evaluering (accuracy, F1, confusion matrix)
 ├── kaggle_download.py         # Download datasaet fra Kaggle
 ├── requirements.txt           # Python dependencies
