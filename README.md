@@ -18,7 +18,7 @@ source venv/bin/activate     # Linux/Mac
 pip install -r requirements.txt
 pip install dvc dvc-s3
 
-# 4. Konfigurer DVC credentials (VIGTIGT - dette skal alle goere)
+# 4. Konfigurer DVC credentials (VIGTIGT - dette skal alle gøre)
 dvc remote modify --local minio access_key_id daki
 dvc remote modify --local minio secret_access_key dakiminio
 
@@ -26,7 +26,7 @@ dvc remote modify --local minio secret_access_key dakiminio
 dvc pull                     # Hvis data er DVC-tracked
 python kaggle_download.py    # Eller download fra Kaggle
 
-# 6. Traen
+# 6. Træn
 python src/train.py
 
 # 7. Evaluer
@@ -41,11 +41,11 @@ MLOps-PJK/
 │   └── config.yaml           # Alle hyperparametre (YAML)
 ├── src/
 │   ├── __init__.py
-│   ├── data_loader.py        # Dataset klasse, augmentering, splits
+│   ├── data_loader.py        # Dataset, augmentering, splits
 │   ├── model.py              # ResNet18 definition + save/load
-│   ├── train.py              # Traeningsloop med checkpointing
+│   ├── train.py              # Træningsloop med checkpointing
 │   └── evaluate.py           # Evaluering (accuracy, F1, confusion matrix)
-├── kaggle_download.py         # Download datasaet fra Kaggle
+├── kaggle_download.py         # Download datasæt fra Kaggle
 ├── requirements.txt           # Python dependencies
 ├── .dvc/config                # DVC remote config (committet - INGEN credentials)
 └── .dvc/config.local          # DVC credentials (gitignored - lav selv)
@@ -55,14 +55,14 @@ Lokale mapper (gitignored):
 ```
 data/raw/PetImages/{Cat,Dog}/  # ~25.000 billeder
 models/                        # Gemte checkpoints (.pt)
-logs/                          # Traeningslogs
+logs/                          # Træningslogs
 ```
 
 ## DVC Setup (data versionering)
 
-DVC remote er konfigureret til MinIO paa AAU-klusteret. Konfigurationen (`.dvc/config`) er committet, men **credentials er IKKE committet**.
+DVC remote er konfigureret til MinIO på AAU-klusteret. Konfigurationen (`.dvc/config`) er committet, men **credentials er IKKE committet**.
 
-Hvert gruppemedlem skal koere dette en gang efter clone:
+Hvert gruppemedlem skal køre dette en gang efter clone:
 
 ```bash
 dvc remote modify --local minio access_key_id daki
@@ -76,7 +76,7 @@ Dette opretter `.dvc/config.local` som er gitignored.
 ```bash
 dvc pull                       # Hent data fra MinIO
 dvc push                       # Upload data til MinIO
-dvc add data/                  # Track data-aendringer
+dvc add data/                  # Track data-ændringer
 git add data.dvc .gitignore    # Commit DVC metafil
 ```
 
@@ -102,14 +102,14 @@ training:
   seed: 42
 ```
 
-Aendr hyperparametre her - **ikke** i koden.
+Ændr hyperparametre her - **ikke** i koden.
 
 ## AAU MLOps Kluster
 
-Kraever AAU-netvaerk. Alle services koerer paa `172.24.198.42` (daki-storage):
+Kræver AAU-netværk. Alle services kører på `172.24.198.42` (daki-storage):
 
-| Service | Port | URL | Formaal |
-|---------|------|-----|---------|
+| Service | Port | URL | Formål |
+|---------|------|-----|--------|
 | **MinIO** | 9001 (UI) / 9000 (API) | http://172.24.198.42:9001 | S3 storage, DVC remote |
 | **Jenkins** | 8080 | http://172.24.198.42:8080 | CI/CD pipeline |
 | **MLFlow** | 5050 | http://172.24.198.42:5050 | Experiment tracking |
@@ -133,10 +133,10 @@ Kraever AAU-netvaerk. Alle services koerer paa `172.24.198.42` (daki-storage):
 
 ### Regler
 
-- **Brug altid venv eller Docker** paa worker nodes
-- **Gem aldrig data paa SSD** - brug MinIO
-- **Max ~30 min** traeningsruns paa klusteret (brug AI-Lab til fulde runs)
-- **Roer aldrig CUDA/NVIDIA drivers**
+- **Brug altid venv eller Docker** på worker nodes
+- **Gem aldrig data på SSD** - brug MinIO
+- **Max ~30 min** træningsruns på klusteret (brug AI-Lab til fulde runs)
+- **Rør aldrig CUDA/NVIDIA drivers**
 
 ## Git Workflow
 
@@ -150,5 +150,5 @@ git checkout -b feature/mit-feature
 git add -A && git commit -m "Add feature X"
 git push -u origin feature/mit-feature
 
-# Merge til main via PR paa GitHub
+# Merge til main via PR på GitHub
 ```
