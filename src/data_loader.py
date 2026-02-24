@@ -3,7 +3,6 @@ Data loader for Cats vs Dogs dataset.
 Handles loading, filtering corrupt images, and train/val/test splitting.
 """
 
-import os
 from pathlib import Path
 from typing import Tuple, List
 
