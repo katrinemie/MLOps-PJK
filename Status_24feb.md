@@ -22,19 +22,19 @@
 | Opgave | Status |
 |--------|--------|
 | Ekstra branch (development/feature) | ✅ `Peter`-branch eksisterer |
-| Pre-commit hooks (Flake8, API keys, filstørrelse) | ❌ ingen `.pre-commit-config.yaml` | Peter er i gang.
-| Unit tests | ❌ ingen `tests/`-mappe |
-| Jenkins / CI/CD opsætning | ❌ ingen `Jenkinsfile` |
-| Pipeline trigger ved commit | ❌ |
-| Docker build + push til registry | ❌ ingen `Dockerfile` |
-| Automatisk træning af ny model | ❌ |
-| MLFlow / WandB lineage | ❌ |
-| Automatisk evaluering | ❌ |
-| Model registry (MLFlow) | ❌ |
+| Pre-commit hooks (Flake8, API keys, filstørrelse) | ✅ `.pre-commit-config.yaml` oprettet og installeret |
+| Unit tests | ✅ 8 tests, alle passed (coverage: model 85%, data_loader 45%) |
+| Jenkins / CI/CD opsætning | ✅ `Jenkinsfile` oprettet — mangler Jenkins job på server |
+| Pipeline trigger ved commit | ❓ Jenkinsfile klar, men job ikke opsat på `172.24.198.42:8080` endnu |
+| Docker build + push til registry | ✅ `Dockerfile` oprettet |
+| Automatisk træning af ny model | ✅ Indgår i Jenkinsfile |
+| MLFlow / WandB lineage | ✅ MLFlow logging tilføjet i `train.py` |
+| Automatisk evaluering | ✅ Indgår i Jenkinsfile |
+| Model registry (MLFlow) | ✅ Indgår i Jenkinsfile (registrerer hvis accuracy ≥ 80%) |
 | Deploy model + log til MLFlow | ❌ |
 | Branch protection + auto-merge | ❌ |
 
-**Modul 2: ~1/12 — mangler det meste**
+**Modul 2: ~9/12**
 
 ---
 
@@ -81,9 +81,9 @@
 | Modul | Færdigt |
 |-------|---------|
 | Modul 1 | ~75% |
-| Modul 2 | ~8% |
+| Modul 2 | ~75% |
 | Modul 3 | 0% |
 | Modul 4 | 0% |
 | Modul 5 | 0% |
 
-Største prioritet: **Modul 2** — Jenkinsfile, pre-commit hooks, unit tests og MLFlow mangler alle og er fundamentet for resten af pipeline'en.
+Næste prioritet: **Opsæt Jenkins job** på `http://172.24.198.42:8080` og kør første træning for at få MLFlow screenshots til D2.3.
