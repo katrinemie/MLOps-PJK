@@ -89,4 +89,3 @@ Fælles login
 
 Username and password for all nodes: daki/daki
 * pwd: dakiminio (til MinIO)
-
