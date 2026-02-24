@@ -11,7 +11,7 @@
 | Kode dokumentation / PEP8 | ❓ (ikke verificeret) |
 | Data versionering (DVC + MinIO) | ✅ `.dvc/config` opsat |
 | Konfigurationsfil (`config.yaml`) | ✅ `configs/config.yaml` |
-| Hyperparametre indlæses fra config | ❓ (ikke verificeret) |
+| Hyperparametre indlæses fra config | ❓ (ikke verificeret) Men filen er lavet|
 
 **Modul 1: ~6/8 verificeret**
 
@@ -22,7 +22,7 @@
 | Opgave | Status |
 |--------|--------|
 | Ekstra branch (development/feature) | ✅ `Peter`-branch eksisterer |
-| Pre-commit hooks (Flake8, API keys, filstørrelse) | ❌ ingen `.pre-commit-config.yaml` |
+| Pre-commit hooks (Flake8, API keys, filstørrelse) | ❌ ingen `.pre-commit-config.yaml` | Peter er i gang.
 | Unit tests | ❌ ingen `tests/`-mappe |
 | Jenkins / CI/CD opsætning | ❌ ingen `Jenkinsfile` |
 | Pipeline trigger ved commit | ❌ |
