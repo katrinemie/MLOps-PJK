@@ -1,4 +1,4 @@
-Exercises/Tasks:
+Exercises/Tasks 1:
 
 Create a GitHub repository to host the MLOps course project and make sure that all team members have access.
 Remember to create a .gitignore file suitable for your project so you don't version unwanted files
