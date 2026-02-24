@@ -17,4 +17,4 @@ In addition to briefly discussing the relevant topics covered in this lecture an
 D1.1: A short introduction to MLOps, its purpose, and the difference from existing development paradigms
 D1.2: A short description of the selected project for which you will develop an MLOps pipeline.
 D1.3: What challenges do you foresee for your specific project regarding development, reproducibility, monitoring, maintenance and etc. of the AI-system?
-D1.4: A description of your model card, and a reference to the appendix where the final model card can be seen (For now, just draft an initial model card, and complete it as the course progresses). 
+D1.4: A description of your model card, and a reference to the appendix where the final model card can be seen (For now, just draft an initial model card, and complete it as the course progresses).

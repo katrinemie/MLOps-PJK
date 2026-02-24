@@ -4,8 +4,8 @@ Continue building your MLOps pipeline, including:
 
 Create at least one other branch (e.g., development) besides the main branch in your git project.
 Setup local pre-commits and add some checks (e.g., Flake, hardcoded API keys, file size)
-Add unit tests to the core functionality of your project codebase 
-Setup a CI/CD framework to orchestrate the "Local MLOps Workflow Example" described in MM2. You can use Jenkins, Github Actions or another tool you might prefer. However, I recommend that you stay within the AAU network and use the local resources for simplicity. 
+Add unit tests to the core functionality of your project codebase
+Setup a CI/CD framework to orchestrate the "Local MLOps Workflow Example" described in MM2. You can use Jenkins, Github Actions or another tool you might prefer. However, I recommend that you stay within the AAU network and use the local resources for simplicity.
 Make your pipeline trigger based on a new commit, e.g. using Jenkins to initiate execution of unittests
 Automate the building of a Docker container and push this to a registry if tests pass. Remember to tag the image with the Git commit hash.
 Automate the training of a new model version

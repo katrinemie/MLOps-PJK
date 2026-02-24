@@ -17,5 +17,5 @@ D3.1: An estimate of the speedup of your model training by parallelization
 D3.2: An estimate of the scaling needed (compute, dataset, parameters) to halve your models current test loss following the power-law (It's okay to use the constants found for LLMs even though your model might not be a LLM)
 D3.3: The effect of the implemented multi-GPU parallelization strategy e.g. training time speed-up
 D3.4: The effect of the implemented multi-node parallelization strategy e.g. training time speed-up
-D3.5: The effect of the implemented memory optimization strategies e.g. VRAM savings and effect on training time using AMP. 
-D3.6: The effect of the different stages of the ZerO optimizer in relation to VRAM savings and effect on training time. 
+D3.5: The effect of the implemented memory optimization strategies e.g. VRAM savings and effect on training time using AMP.
+D3.6: The effect of the different stages of the ZerO optimizer in relation to VRAM savings and effect on training time.
