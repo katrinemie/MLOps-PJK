@@ -3,10 +3,8 @@ Evaluation script for Cats vs Dogs classification.
 """
 
 import argparse
-from pathlib import Path
 
 import torch
-import torch.nn as nn
 import yaml
 from sklearn.metrics import (
     accuracy_score,
