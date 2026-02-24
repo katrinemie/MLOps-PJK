@@ -24,8 +24,8 @@
 | Ekstra branch (development/feature) | ✅ `Peter`-branch eksisterer |
 | Pre-commit hooks (Flake8, API keys, filstørrelse) | ✅ `.pre-commit-config.yaml` oprettet og installeret |
 | Unit tests | ✅ 8 tests, alle passed (coverage: model 85%, data_loader 45%) |
-| Jenkins / CI/CD opsætning | ✅ `Jenkinsfile` oprettet — mangler Jenkins job på server |
-| Pipeline trigger ved commit | ❓ Jenkinsfile klar, men job ikke opsat på `172.24.198.42:8080` endnu |
+| Jenkins / CI/CD opsætning | ✅ Job oprettet på server (`PJK - Cat vs Dog`), pipeline kører |
+| Pipeline trigger ved commit | ✅ Jenkins scanner repo og bygger automatisk ved nye commits |
 | Docker build + push til registry | ✅ `Dockerfile` oprettet |
 | Automatisk træning af ny model | ✅ Indgår i Jenkinsfile |
 | MLFlow / WandB lineage | ✅ MLFlow logging tilføjet i `train.py` |
@@ -34,7 +34,7 @@
 | Deploy model + log til MLFlow | ❌ |
 | Branch protection + auto-merge | ❌ |
 
-**Modul 2: ~9/12**
+**Modul 2: ~10/12**
 
 ---
 
@@ -81,9 +81,9 @@
 | Modul | Færdigt |
 |-------|---------|
 | Modul 1 | ~75% |
-| Modul 2 | ~75% |
+| Modul 2 | ~83% |
 | Modul 3 | 0% |
 | Modul 4 | 0% |
 | Modul 5 | 0% |
 
-Næste prioritet: **Opsæt Jenkins job** på `http://172.24.198.42:8080` og kør første træning for at få MLFlow screenshots til D2.3.
+Næste prioritet: Vent på at bygget er færdigt → tjek MLFlow for træningsdata → tag screenshots til D2.3. Herefter mangler kun deploy + branch protection.
