@@ -6,6 +6,7 @@ import argparse
 import os
 from pathlib import Path
 
+import mlflow
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -119,26 +120,55 @@ def train(config: dict) -> None:
     model_dir = Path(config["output"]["model_dir"])
     model_dir.mkdir(parents=True, exist_ok=True)
 
-    best_val_acc = 0.0
-    print(f"\nStarting training for {config['training']['epochs']} epochs...")
+    mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "http://172.24.198.42:5050"))
+    mlflow.set_experiment("cats-vs-dogs")
 
-    for epoch in range(config["training"]["epochs"]):
-        print(f"\nEpoch {epoch + 1}/{config['training']['epochs']}")
+    with mlflow.start_run():
+        # Log alle hyperparametre fra config
+        mlflow.log_params({
+            "model": config["model"]["name"],
+            "pretrained": config["model"]["pretrained"],
+            "epochs": config["training"]["epochs"],
+            "learning_rate": config["training"]["learning_rate"],
+            "optimizer": config["training"]["optimizer"],
+            "batch_size": config["data"]["batch_size"],
+            "image_size": config["data"]["image_size"],
+            "seed": config["training"]["seed"],
+        })
 
-        train_loss, train_acc = train_epoch(
-            model, train_loader, criterion, optimizer, device
-        )
-        val_loss, val_acc = validate(model, val_loader, criterion, device)
+        best_val_acc = 0.0
+        print(f"\nStarting training for {config['training']['epochs']} epochs...")
 
-        print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%")
-        print(f"Val Loss: {val_loss:.4f}, Val Acc: {val_acc:.2f}%")
+        for epoch in range(config["training"]["epochs"]):
+            print(f"\nEpoch {epoch + 1}/{config['training']['epochs']}")
 
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            save_model(model, model_dir / "best_model.pt", config)
+            train_loss, train_acc = train_epoch(
+                model, train_loader, criterion, optimizer, device
+            )
+            val_loss, val_acc = validate(model, val_loader, criterion, device)
 
-    save_model(model, model_dir / "final_model.pt", config)
-    print(f"\nTraining complete! Best validation accuracy: {best_val_acc:.2f}%")
+            print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%")
+            print(f"Val Loss: {val_loss:.4f}, Val Acc: {val_acc:.2f}%")
+
+            # Log metrikker for denne epoch
+            mlflow.log_metrics({
+                "train_loss": train_loss,
+                "train_acc": train_acc,
+                "val_loss": val_loss,
+                "val_acc": val_acc,
+            }, step=epoch)
+
+            if val_acc > best_val_acc:
+                best_val_acc = val_acc
+                save_model(model, model_dir / "best_model.pt", config)
+
+        save_model(model, model_dir / "final_model.pt", config)
+
+        # Log slutresultat og gem modelfil som artifact
+        mlflow.log_metric("best_val_acc", best_val_acc)
+        mlflow.log_artifact(str(model_dir / "best_model.pt"))
+
+        print(f"\nTraining complete! Best validation accuracy: {best_val_acc:.2f}%")
 
 
 def main():
