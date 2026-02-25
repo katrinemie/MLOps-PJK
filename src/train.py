@@ -3,6 +3,7 @@ Training script for Cats vs Dogs classification.
 """
 
 import argparse
+import os
 from pathlib import Path
 
 import mlflow
