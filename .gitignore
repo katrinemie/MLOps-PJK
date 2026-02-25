@@ -1,6 +1,5 @@
-# Data
+# Data (DVC styrer data/ via egne .gitignore-filer)
 creditcard.csv
-/data
 
 # Virtual environment
 .venv
