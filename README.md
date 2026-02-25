@@ -2,6 +2,8 @@
 
 MLOps pipeline for **Cats vs Dogs** billedklassifikation - DAKI4 Gruppe 3.
 
+<!-- Test branch protection rules -->
+
 ## Quick Start
 
 ```bash
