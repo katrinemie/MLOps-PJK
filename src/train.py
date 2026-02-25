@@ -10,6 +10,7 @@ import mlflow
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.cuda.amp import GradScaler, autocast
 import yaml
 from tqdm import tqdm
 
@@ -23,12 +24,14 @@ def train_epoch(
     criterion: nn.Module,
     optimizer: optim.Optimizer,
     device: torch.device,
+    scaler: GradScaler = None,
 ) -> tuple:
-    """Train for one epoch."""
+    """Train for one epoch with optional AMP."""
     model.train()
     running_loss = 0.0
     correct = 0
     total = 0
+    use_amp = scaler is not None
 
     progress_bar = tqdm(train_loader, desc="Training")
     for images, labels in progress_bar:
@@ -36,10 +39,19 @@ def train_epoch(
         labels = labels.to(device)
 
         optimizer.zero_grad()
-        outputs = model(images)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
+
+        if use_amp:
+            with autocast("cuda"):
+                outputs = model(images)
+                loss = criterion(outputs, labels)
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)
+            scaler.update()
+        else:
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
 
         running_loss += loss.item()
         _, predicted = outputs.max(1)
@@ -117,6 +129,11 @@ def train(config: dict) -> None:
             momentum=0.9,
         )
 
+    # AMP: enable when running on CUDA
+    use_amp = device.type == "cuda"
+    scaler = GradScaler() if use_amp else None
+    print(f"Automatic Mixed Precision (AMP): {'ON' if use_amp else 'OFF'}")
+
     model_dir = Path(config["output"]["model_dir"])
     model_dir.mkdir(parents=True, exist_ok=True)
 
@@ -134,6 +151,7 @@ def train(config: dict) -> None:
             "batch_size": config["data"]["batch_size"],
             "image_size": config["data"]["image_size"],
             "seed": config["training"]["seed"],
+            "amp": use_amp,
         })
 
         best_val_acc = 0.0
@@ -143,7 +161,7 @@ def train(config: dict) -> None:
             print(f"\nEpoch {epoch + 1}/{config['training']['epochs']}")
 
             train_loss, train_acc = train_epoch(
-                model, train_loader, criterion, optimizer, device
+                model, train_loader, criterion, optimizer, device, scaler
             )
             val_loss, val_acc = validate(model, val_loader, criterion, device)
 
