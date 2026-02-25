@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'daki-master' }
+    agent any
 
     environment {
         REGISTRY       = '172.24.198.42:5000'
