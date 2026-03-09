@@ -1,0 +1,85 @@
+{
+  "model": "ResNet18 (ImageNet pretrained, 1000 classes)",
+  "test_samples": 200,
+  "metric": "prediction_agreement_with_unpruned_model",
+  "pruning_results": [
+    {
+      "pruning_pct": 0.0,
+      "sparsity": 0.0,
+      "prediction_agreement": 100.0,
+      "prediction_drop": 0.0
+    },
+    {
+      "pruning_pct": 10.0,
+      "sparsity": 10.0,
+      "prediction_agreement": 100.0,
+      "prediction_drop": 0.0
+    },
+    {
+      "pruning_pct": 20.0,
+      "sparsity": 20.0,
+      "prediction_agreement": 99.0,
+      "prediction_drop": 1.0
+    },
+    {
+      "pruning_pct": 30.0,
+      "sparsity": 30.0,
+      "prediction_agreement": 99.5,
+      "prediction_drop": 0.5
+    },
+    {
+      "pruning_pct": 40.0,
+      "sparsity": 40.0,
+      "prediction_agreement": 97.5,
+      "prediction_drop": 2.5
+    },
+    {
+      "pruning_pct": 50.0,
+      "sparsity": 50.0,
+      "prediction_agreement": 14.0,
+      "prediction_drop": 86.0
+    },
+    {
+      "pruning_pct": 60.0,
+      "sparsity": 60.0,
+      "prediction_agreement": 0.0,
+      "prediction_drop": 100.0
+    },
+    {
+      "pruning_pct": 70.0,
+      "sparsity": 70.0,
+      "prediction_agreement": 0.0,
+      "prediction_drop": 100.0
+    },
+    {
+      "pruning_pct": 80.0,
+      "sparsity": 80.0,
+      "prediction_agreement": 0.0,
+      "prediction_drop": 100.0
+    },
+    {
+      "pruning_pct": 90.0,
+      "sparsity": 90.0,
+      "prediction_agreement": 0.0,
+      "prediction_drop": 100.0
+    },
+    {
+      "pruning_pct": 95.0,
+      "sparsity": 95.0,
+      "prediction_agreement": 0.0,
+      "prediction_drop": 100.0
+    }
+  ],
+  "finetuning": {
+    "70pct": {
+      "before": 0.0,
+      "after": 99.5,
+      "recovery_pp": 99.5
+    },
+    "90pct": {
+      "before": 0.0,
+      "after": 99.5,
+      "recovery_pp": 99.5
+    }
+  }
+}
