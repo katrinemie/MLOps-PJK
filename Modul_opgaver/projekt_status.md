@@ -9,7 +9,7 @@
 | **1: Introduction to MLOps** | 9/9 ✅ | 4/4 ✅ | Færdig |
 | **2: Continuous ML** | 10/13 ⚠️ | 3/3 ✅ | Næsten færdig |
 | **3: Scalable Training** | 4/6 ⚠️ | 6/6 ✅ | Scripts skrevet, utestet |
-| **4: Scalable Inference** | 5/6 ⚠️ | 4/4 ✅ | Næsten færdig |
+| **4: Scalable Inference** | 6/6 ✅ | 4/4 ✅ | Færdig |
 | **5: Deployment** | 3/5 ⚠️ | 2/2 ✅ | Næsten færdig |
 | **6: Monitoring** | 0/4 ❌ | 0/4 ❌ | Ikke startet |
 | **7: Guest Lecture** | ? | 0/1 ❌ | Materiale mangler |
@@ -95,17 +95,17 @@
 
 ---
 
-## Modul 4: Scalable Inference ⚠️
+## Modul 4: Scalable Inference ✅
 
 ### Exercises
 | # | Opgave | Status | Fil/Implementering |
 |---|--------|--------|--------------------|
-| 1 | Post-training quantization (FP32→INT8) | ✅ | `src/quantize_benchmark.py` (74.8% reduktion) |
-| 2 | Benchmark inference tid + accuracy | ✅ | `results/quantization_results.json` |
-| 3 | Batch inference script | ✅ | `src/batch_benchmark.py` (peak 170.8 fps) |
-| 4 | Pruning (graduelt, observer accuracy drop) | ✅ | `src/prune_finetune.py` |
+| 1 | Post-training quantization (FP32→INT8) | ✅ | `src/quantize_benchmark.py` (FX static, 74.8% reduktion, 2.4-6.3x speedup) |
+| 2 | Benchmark inference tid + accuracy | ✅ | `results/quantization_results.json` (friske tal fra AI-Lab job 313882) |
+| 3 | Batch inference script | ✅ | `src/batch_benchmark.py` (peak 350.2 fps ved bs=16) |
+| 4 | Pruning (graduelt, observer accuracy drop) | ✅ | `src/prune_finetune.py` (cliff ved 50%) |
 | 5 | Fine-tune stærkt prunet model | ✅ | Knowledge distillation → 99.5% recovery |
-| 6 | Inkluder mindst én optimering i pipeline | ❌ | Ikke i Jenkinsfile |
+| 6 | Inkluder mindst én optimering i pipeline | ✅ | Quantize-stage i `Jenkinsfile` |
 
 ### D-punkter (rapport)
 | D-punkt | Krav | Status |
@@ -186,9 +186,7 @@
 6. Modul 2: Branch protection + auto-merge
 7. Modul 2: Gem model card i MLflow
 8. Modul 3: Kør DDP/DeepSpeed/ZeRO på AI-Lab og dokumenter faktiske resultater
-9. Modul 4: Inkluder kvantisering/pruning i Jenkinsfile
 
 ### 🟢 Nice-to-have
-10. Modul 2: Deploy-stage i Jenkinsfile
-11. Modul 5: Implementer endpoint testing i kode
-12. DVC tracking af faktisk data (.dvc filer)
+9. Modul 5: Implementer endpoint testing i kode
+10. DVC tracking af faktisk data (.dvc filer)
