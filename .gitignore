@@ -1,6 +1,6 @@
-# Data
+# Data (DVC styrer data/ via egne .gitignore-filer)
+data/
 creditcard.csv
-/data
 !data/raw/PetImages.dvc
 
 # Virtual environment
@@ -28,3 +28,4 @@ __pycache__/
 
 
 .DS_Store
+PetImages.zip
