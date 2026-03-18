@@ -17,6 +17,7 @@ from carbontracker.tracker import CarbonTracker
 
 from data_loader import create_data_loaders
 from model import create_model, save_model
+from model_card import log_model_card
 
 
 def train_epoch(
@@ -200,6 +201,13 @@ def train(config: dict) -> None:
         # Log slutresultat og gem modelfil som artifact
         mlflow.log_metric("best_val_acc", best_val_acc)
         mlflow.log_artifact(str(model_dir / "best_model.pt"))
+
+        # Generer og log model card som artifact
+        log_model_card(
+            config=config,
+            metrics={"best_val_acc": best_val_acc},
+            output_dir=str(model_dir),
+        )
 
         print(f"\nTraining complete! Best validation accuracy: {best_val_acc:.2f}%")
 
