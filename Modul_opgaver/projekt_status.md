@@ -1,17 +1,17 @@
 # MLOps Projekt - Samlet Opgavestatus
 
-> Sidst opdateret: 2026-03-18
+> Sidst opdateret: 2026-03-18 (opdateret samme dag)
 
 ## Overblik
 
 | Modul | Exercises | D-punkter (rapport) | Status |
 |-------|-----------|---------------------|--------|
 | **1: Introduction to MLOps** | 9/9 ✅ | 4/4 ✅ | Færdig |
-| **2: Continuous ML** | 10/13 ⚠️ | 3/3 ✅ | Næsten færdig |
+| **2: Continuous ML** | 12/13 ⚠️ | 3/3 ✅ | Næsten færdig |
 | **3: Scalable Training** | 4/6 ⚠️ | 6/6 ✅ | Scripts skrevet, utestet |
 | **4: Scalable Inference** | 6/6 ✅ | 4/4 ✅ | Færdig |
 | **5: Deployment** | 3/5 ⚠️ | 2/2 ✅ | Næsten færdig |
-| **6: Monitoring** | 0/4 ❌ | 0/4 ❌ | Ikke startet |
+| **6: Monitoring** | 1/4 ⚠️ | 0/4 ❌ | Delvist startet |
 | **7: Guest Lecture** | ? | 0/1 ❌ | Materiale mangler |
 | **8: Post Deployment** | ? | 0/2 ❌ | Materiale mangler |
 | **Total** | | **19/26 (73%)** | **Bestå-krav: 75% (20/26)** |
@@ -51,15 +51,15 @@
 | 1 | Opret development branch | ✅ | `development` branch |
 | 2 | Setup pre-commits (flake8, API keys, filstørrelse) | ✅ | `.pre-commit-config.yaml` |
 | 3 | Tilføj unit tests | ✅ | `tests/` (8 tests) |
-| 4 | Setup CI/CD framework (Jenkins) | ✅ | `Jenkinsfile` (7 stages) |
+| 4 | Setup CI/CD framework (Jenkins) | ✅ | `Jenkinsfile` (8 stages) |
 | 5 | Pipeline trigger på nye commits | ✅ | Jenkins webhook |
 | 6 | Automatiser Docker build + push til registry | ✅ | Stage i Jenkinsfile → `172.24.198.42:5000` |
 | 7 | Automatiser model træning | ✅ | Stage i Jenkinsfile |
 | 8 | Implementer lineage (MLflow) | ✅ | MLflow i train.py |
 | 9 | Automatisk evaluering | ✅ | Stage i Jenkinsfile |
 | 10 | Model registry hvis kriterier opfyldt | ✅ | accuracy ≥ 80% → MLflow registry |
-| 11 | Deploy model + log til MLflow | ❌ | Ingen deploy-stage |
-| 12 | Gem model card i MLflow | ❌ | Ikke implementeret |
+| 11 | Deploy model + log til MLflow | ✅ | Deploy Model stage i `Jenkinsfile` (sætter model til Production + tagger med git hash) |
+| 12 | Gem model card i MLflow | ✅ | `src/model_card.py` + logges som artifact i `train.py` |
 | 13 | Branch protection + auto-merge | ❌ | Ikke konfigureret |
 
 ### D-punkter (rapport)
@@ -141,7 +141,7 @@
 ### Exercises
 | # | Opgave | Status | Fil/Implementering |
 |---|--------|--------|--------------------|
-| 1 | Carbontracker til carbon footprint (træning + inference) | ❌ | Ikke startet |
+| 1 | Carbontracker til carbon footprint (træning + inference) | ✅ Skrevet, ❌ utestet | `src/train.py` — CarbonTracker integreret, logger til `carbon_tracking.json` |
 | 2 | Forudsigelser for total cost (årligt/per request) | ❌ | Ikke startet |
 | 3 | Drift detection pipeline (data/concept drift) | ❌ | Ikke startet |
 | 4 | Monitoring framework (Prometheus + Grafana) | ❌ | Ikke startet |
@@ -175,18 +175,17 @@
 
 ## Prioriteret TODO-liste
 
-### 🔴 Kritisk (blokerer bestået)
-1. **Modul 6: Carbontracker** - Installer og kør under træning
-2. **Modul 6: Årligt CO₂-estimat** - Beregn baseret på carbontracker resultater
-3. **Modul 6: Drift detection** - Implementer pipeline (Evidently AI eller lignende)
-4. **Modul 6: Monitoring dashboard** - Opsæt Prometheus + Grafana, tag screenshot
+### 🔴 Kritisk (blokerer bestået — mangler D6.1-D6.4)
+1. **Modul 6: Kør træning og aflæs CarbonTracker-output** — CarbonTracker er i train.py, skal køres på AI-Lab → noter CO₂-tal
+2. **Modul 6: Årligt CO₂-estimat (D6.2)** — beregn baseret på carbontracker-resultater
+3. **Modul 6: Drift detection (D6.3)** — implementer pipeline med Evidently AI
+4. **Modul 6: Monitoring dashboard (D6.4)** — Prometheus + Grafana screenshot
 5. **Skriv D6.1-D6.4 i rapport**
 
 ### 🟡 Vigtigt (forbedrer kvalitet)
 6. Modul 2: Branch protection + auto-merge
-7. Modul 2: Gem model card i MLflow
-8. Modul 3: Kør DDP/DeepSpeed/ZeRO på AI-Lab og dokumenter faktiske resultater
+7. Modul 3: Kør DDP/DeepSpeed/ZeRO på AI-Lab og dokumenter faktiske resultater
 
 ### 🟢 Nice-to-have
-9. Modul 5: Implementer endpoint testing i kode
-10. DVC tracking af faktisk data (.dvc filer)
+8. Modul 5: Implementer endpoint testing i kode
+9. DVC tracking af faktisk data (.dvc filer)
