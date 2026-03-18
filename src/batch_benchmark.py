@@ -60,7 +60,9 @@ def main():
 
     batch_sizes = [1, 2, 4, 8, 16, 32, 64]
 
-    print(f"\n{'BS':>4} | {'FP32(ms)':>9} | {'Lat/img':>8} | {'FPS':>8} | {'INT8(ms)':>9} | {'INT8 FPS':>9}")
+    header = f"{'BS':>4} | {'FP32(ms)':>9} | {'Lat/img':>8} | "
+    header += f"{'FPS':>8} | {'INT8(ms)':>9} | {'INT8 FPS':>9}"
+    print("\n" + header)
     print("-" * 65)
 
     results_fp32, results_int8 = [], []
@@ -69,19 +71,28 @@ def main():
         r_int8 = benchmark_batch(model_int8, bs)
         results_fp32.append(r_fp32)
         results_int8.append(r_int8)
-        print(f"{bs:>4} | {r_fp32['total_ms']:>9.2f} | {r_fp32['latency_per_image_ms']:>8.2f} | "
-              f"{r_fp32['throughput_fps']:>8.1f} | {r_int8['total_ms']:>9.2f} | {r_int8['throughput_fps']:>9.1f}")
+        row = (f"{bs:>4} | {r_fp32['total_ms']:>9.2f} | "
+               f"{r_fp32['latency_per_image_ms']:>8.2f} | "
+               f"{r_fp32['throughput_fps']:>8.1f} | "
+               f"{r_int8['total_ms']:>9.2f} | "
+               f"{r_int8['throughput_fps']:>9.1f}")
+        print(row)
 
     peak = max(results_fp32, key=lambda r: r['throughput_fps'])
-    sat_bs = next(r['batch_size'] for r in results_fp32 if r['throughput_fps'] >= 0.95 * peak['throughput_fps'])
+    threshold = 0.95 * peak['throughput_fps']
+    sat_bs = next(r['batch_size'] for r in results_fp32 if r['throughput_fps'] >= threshold)
 
     print(f"\nPeak throughput: {peak['throughput_fps']} img/s at bs={peak['batch_size']}")
     print(f"Saturation (~95%) at bs={sat_bs}")
 
     os.makedirs("results", exist_ok=True)
     with open("results/batch_benchmark_results.json", "w") as f:
-        json.dump({"fp32": results_fp32, "int8": results_int8,
-                    "saturation_batch_size": sat_bs, "peak_throughput_fps": peak['throughput_fps']}, f, indent=2)
+        json.dump({
+            "fp32": results_fp32,
+            "int8": results_int8,
+            "saturation_batch_size": sat_bs,
+            "peak_throughput_fps": peak['throughput_fps'],
+        }, f, indent=2)
     print("Saved to results/batch_benchmark_results.json")
 
 

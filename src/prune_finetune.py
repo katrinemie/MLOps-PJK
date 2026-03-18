@@ -94,8 +94,12 @@ def main():
             apply_global_pruning(model, level)
         sparsity = get_sparsity(model)
         agree = agreement(model, test_data, ref_preds)
-        results.append({"pruning_pct": level * 100, "sparsity": round(sparsity * 100, 1),
-                         "prediction_agreement": round(agree, 1), "prediction_drop": round(100 - agree, 1)})
+        results.append({
+            "pruning_pct": level * 100,
+            "sparsity": round(sparsity * 100, 1),
+            "prediction_agreement": round(agree, 1),
+            "prediction_drop": round(100 - agree, 1),
+        })
         print(f"{level*100:>7.0f}% | {sparsity*100:>7.1f}% | {agree:>8.1f}%")
 
     # Fine-tune heavily pruned models
@@ -118,14 +122,21 @@ def main():
         print(f"After:  {after:.1f}% (recovery: {after - before:+.1f}pp)")
 
         ft_results[f"{int(level*100)}pct"] = {
-            "before": round(before, 1), "after": round(after, 1), "recovery_pp": round(after - before, 1)}
+            "before": round(before, 1),
+            "after": round(after, 1),
+            "recovery_pp": round(after - before, 1),
+        }
 
     # Save
     os.makedirs("results", exist_ok=True)
     with open("results/pruning_results.json", "w") as f:
-        json.dump({"model": "ResNet18 (ImageNet, 1000 classes)", "test_samples": 200,
-                    "metric": "prediction_agreement_with_unpruned_model",
-                    "pruning_results": results, "finetuning": ft_results}, f, indent=2)
+        json.dump({
+            "model": "ResNet18 (ImageNet, 1000 classes)",
+            "test_samples": 200,
+            "metric": "prediction_agreement_with_unpruned_model",
+            "pruning_results": results,
+            "finetuning": ft_results,
+        }, f, indent=2)
     print("\nSaved to results/pruning_results.json")
 
 

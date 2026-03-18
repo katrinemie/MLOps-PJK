@@ -1,11 +1,12 @@
 """Generate report figures from experiment results (reads from JSON)."""
 
 import json
+import os
+
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import numpy as np
-import os
+import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
 
 OUTDIR = os.path.join(os.path.dirname(__file__), '..', '..', 'DAKI4---MLOps-Jonas', 'figures')
 RESULTS = os.path.join(os.path.dirname(__file__), '..', 'results')
@@ -188,9 +189,12 @@ def fig_finetune():
     ax.bar(x + w/2, after, w, label='After distillation', color=GREEN, alpha=0.8)
 
     for i in range(len(labels)):
-        ax.text(x[i] - w/2, max(before[i], 2) + 2, f'{before[i]}%', ha='center', fontweight='bold', color=RED)
-        ax.text(x[i] + w/2, after[i] + 2, f'{after[i]}%', ha='center', fontweight='bold', color=GREEN)
-        ax.annotate(f'+{after[i]-before[i]:.1f}pp', xy=(x[i], 108), ha='center', fontweight='bold', color=GREEN)
+        ax.text(x[i] - w/2, max(before[i], 2) + 2, f'{before[i]}%',
+                ha='center', fontweight='bold', color=RED)
+        ax.text(x[i] + w/2, after[i] + 2, f'{after[i]}%',
+                ha='center', fontweight='bold', color=GREEN)
+        ax.annotate(f'+{after[i]-before[i]:.1f}pp',
+                    xy=(x[i], 108), ha='center', fontweight='bold', color=GREEN)
 
     ax.set_ylabel('Prediction Agreement (%)')
     ax.set_title('D4.4: Recovery via Knowledge Distillation', fontweight='bold')
@@ -215,8 +219,10 @@ def fig_gustafson():
     ax.plot(gpus, gpus, '--', color=GRAY, linewidth=1, alpha=0.5, label='Linear (ideal)')
 
     for n in [1, 2, 3]:
-        ax.annotate(f'{speedup[n-1]:.2f}×', xy=(n, speedup[n-1]),
-                     xytext=(n + 0.3, speedup[n-1] - 0.3), fontsize=9, fontweight='bold', color=BLUE)
+        ax.annotate(f'{speedup[n-1]:.2f}×',
+                    xy=(n, speedup[n-1]),
+                    xytext=(n + 0.3, speedup[n-1] - 0.3),
+                    fontsize=9, fontweight='bold', color=BLUE)
 
     ax.axvline(x=3, color=ORANGE, linestyle=':', alpha=0.5)
     ax.text(3.15, 1, 'AAU cluster\n(3 GPUs)', fontsize=8, color=ORANGE)

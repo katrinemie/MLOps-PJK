@@ -76,13 +76,17 @@ def main():
     fp32_bs32 = benchmark(model_fp32, x32, warmup=5, runs=50)
     int8_bs32 = benchmark(model_int8, x32, warmup=5, runs=50)
 
-    print(f"bs=1:  FP32 {fp32_bs1} ms, INT8 {int8_bs1} ms, speedup {round(fp32_bs1/int8_bs1, 2)}x")
-    print(f"bs=32: FP32 {fp32_bs32} ms, INT8 {int8_bs32} ms, speedup {round(fp32_bs32/int8_bs32, 2)}x")
+    sp1 = round(fp32_bs1 / int8_bs1, 2)
+    sp32 = round(fp32_bs32 / int8_bs32, 2)
+    print(f"bs=1:  FP32 {fp32_bs1} ms, INT8 {int8_bs1} ms, speedup {sp1}x")
+    print(f"bs=32: FP32 {fp32_bs32} ms, INT8 {int8_bs32} ms, speedup {sp32}x")
 
     # Agreement
     test = torch.randn(100, 3, 224, 224)
     with torch.no_grad():
-        agree = (model_fp32(test).argmax(1) == model_int8(test).argmax(1)).float().mean().item() * 100
+        p32 = model_fp32(test).argmax(1)
+        p8 = model_int8(test).argmax(1)
+        agree = (p32 == p8).float().mean().item() * 100
     print(f"Prediction agreement: {agree:.1f}%")
 
     # Save
@@ -93,8 +97,16 @@ def main():
         "size_fp32_mb": size_fp32,
         "size_int8_mb": size_int8,
         "size_reduction_pct": reduction,
-        "cpu_batch1": {"fp32_ms": fp32_bs1, "int8_ms": int8_bs1, "speedup": round(fp32_bs1/int8_bs1, 2)},
-        "cpu_batch32": {"fp32_ms": fp32_bs32, "int8_ms": int8_bs32, "speedup": round(fp32_bs32/int8_bs32, 2)},
+        "cpu_batch1": {
+            "fp32_ms": fp32_bs1,
+            "int8_ms": int8_bs1,
+            "speedup": round(fp32_bs1 / int8_bs1, 2),
+        },
+        "cpu_batch32": {
+            "fp32_ms": fp32_bs32,
+            "int8_ms": int8_bs32,
+            "speedup": round(fp32_bs32 / int8_bs32, 2),
+        },
         "prediction_agreement_pct": round(agree, 1),
     }
     with open("results/quantization_results.json", "w") as f:
