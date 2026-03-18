@@ -107,7 +107,19 @@ pipeline {
         }
 
         // ----------------------------------------------------------------
-        // 7. REGISTRER MODEL I MLFLOW (kun hvis accuracy >= MIN_ACCURACY)
+        // 7. QUANTIZE MODEL (FP32 -> INT8)
+        // ----------------------------------------------------------------
+        stage('Quantize') {
+            steps {
+                sh '''
+                    . venv/bin/activate
+                    python src/quantize_benchmark.py
+                '''
+            }
+        }
+
+        // ----------------------------------------------------------------
+        // 8. REGISTRER MODEL I MLFLOW (kun hvis accuracy >= MIN_ACCURACY)
         // ----------------------------------------------------------------
         stage('Register Model') {
             when {
@@ -205,6 +217,27 @@ client.set_model_version_tag(
 print(f"Model '{model_name}' version {version} sat til Production")
 print(f"Git commit: ${GIT_COMMIT}")
 EOF
+                """
+            }
+        }
+
+        // ----------------------------------------------------------------
+        // 9. DEPLOY API (Flask server)
+        // ----------------------------------------------------------------
+        stage('Deploy API') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh """
+                    docker build -f Dockerfile.serve \
+                        -t ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT} \
+                        -t ${REGISTRY}/cats-vs-dogs-api:latest \
+                        .
+                    docker push ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT}
+                    docker push ${REGISTRY}/cats-vs-dogs-api:latest
+
+                    echo " API deployed: ${REGISTRY}/cats-vs-dogs-api:latest"
                 """
             }
         }
