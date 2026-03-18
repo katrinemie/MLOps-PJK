@@ -1,0 +1,24 @@
+FROM pytorch/pytorch:2.0-cuda11.8-runtime-ubuntu22.04
+
+WORKDIR /app
+
+# Kopier dependencies
+COPY serve_requirements.txt requirements.txt ./
+RUN pip install --no-cache-dir -r serve_requirements.txt -r requirements.txt
+
+# Kopier application files
+COPY src/ src/
+COPY configs/ configs/
+
+# Miljøvariabler
+ENV MLFLOW_TRACKING_URI=http://172.24.198.42:5050
+ENV PORT=5000
+
+EXPOSE 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:5000/health')" || exit 1
+
+# Start Flask server
+CMD ["python", "src/serve.py"]

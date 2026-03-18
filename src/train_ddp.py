@@ -30,6 +30,7 @@ from torch.cuda.amp import GradScaler, autocast
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data import DataLoader, random_split
 from torch.utils.data.distributed import DistributedSampler
+from carbontracker.tracker import CarbonTracker
 
 from data_loader import (
     CatsDogsDataset,
@@ -214,6 +215,12 @@ def train_ddp(config, use_amp=True):
     if rank == 0:
         print(f"\nStarting training for {num_epochs} epochs...")
 
+        # Initialize carbon tracker (on rank 0 only)
+        tracker = CarbonTracker(
+            epochs=num_epochs,
+            save_file_path=str(model_dir / "carbon_tracking.json")
+        )
+
     # Reset peak memory for benchmarking
     torch.cuda.reset_peak_memory_stats(device)
     train_start = time.time()
@@ -221,12 +228,18 @@ def train_ddp(config, use_amp=True):
     for epoch in range(num_epochs):
         train_sampler.set_epoch(epoch)
 
+        if rank == 0:
+            tracker.epoch_start()
+
         epoch_start = time.time()
         train_loss, train_acc = train_epoch(
             model, train_loader, criterion, optimizer, device, use_amp, scaler
         )
         val_loss, val_acc = validate(model, val_loader, criterion, device, use_amp)
         epoch_time = time.time() - epoch_start
+
+        if rank == 0:
+            tracker.epoch_end()
 
         if rank == 0:
             print(
@@ -245,6 +258,7 @@ def train_ddp(config, use_amp=True):
 
     if rank == 0:
         save_model(model.module, model_dir / "final_model.pt", config)
+        tracker.stop()
         print("\nTraining complete!")
         print(f"  Best validation accuracy: {best_val_acc:.2f}%")
         print(f"  Total training time: {total_time:.1f}s")

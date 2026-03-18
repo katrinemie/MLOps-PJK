@@ -13,6 +13,7 @@ import torch.optim as optim
 from torch.cuda.amp import GradScaler, autocast
 import yaml
 from tqdm import tqdm
+from carbontracker.tracker import CarbonTracker
 
 from data_loader import create_data_loaders
 from model import create_model, save_model
@@ -140,6 +141,12 @@ def train(config: dict) -> None:
     mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "http://172.24.198.42:5050"))
     mlflow.set_experiment("cats-vs-dogs")
 
+    # Initialize carbon tracker
+    tracker = CarbonTracker(
+        epochs=config["training"]["epochs"],
+        save_file_path=str(model_dir / "carbon_tracking.json")
+    )
+
     with mlflow.start_run():
         # Log alle hyperparametre fra config
         mlflow.log_params({
@@ -160,10 +167,14 @@ def train(config: dict) -> None:
         for epoch in range(config["training"]["epochs"]):
             print(f"\nEpoch {epoch + 1}/{config['training']['epochs']}")
 
+            tracker.epoch_start()
+
             train_loss, train_acc = train_epoch(
                 model, train_loader, criterion, optimizer, device, scaler
             )
             val_loss, val_acc = validate(model, val_loader, criterion, device)
+
+            tracker.epoch_end()
 
             print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%")
             print(f"Val Loss: {val_loss:.4f}, Val Acc: {val_acc:.2f}%")
@@ -181,6 +192,10 @@ def train(config: dict) -> None:
                 save_model(model, model_dir / "best_model.pt", config)
 
         save_model(model, model_dir / "final_model.pt", config)
+
+        # Stop carbon tracker and log results
+        tracker.stop()
+        mlflow.log_artifact(str(model_dir / "carbon_tracking.json"))
 
         # Log slutresultat og gem modelfil som artifact
         mlflow.log_metric("best_val_acc", best_val_acc)
