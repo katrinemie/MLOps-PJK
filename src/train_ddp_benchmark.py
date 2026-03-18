@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader, random_split
 from torch.utils.data.distributed import DistributedSampler
 
 from data_loader import CatsDogsDataset, SubsetWithTransform, get_transforms, load_dataset
-from model import create_model, save_model
+from model import create_model
 
 
 def main():
