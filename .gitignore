@@ -1,4 +1,5 @@
 # Data (DVC styrer data/ via egne .gitignore-filer)
+data/
 creditcard.csv
 
 # Virtual environment
@@ -27,4 +28,3 @@ __pycache__/
 
 .DS_Store
 PetImages.zip
-STATUS_CONTEXT.md
