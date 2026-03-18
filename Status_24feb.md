@@ -8,10 +8,10 @@
 | `.gitignore` fil | ✅ |
 | Base DL-projekt (model, train, evaluate scripts) | ✅ `src/` |
 | `requirements.txt` | ✅ |
-| Kode dokumentation / PEP8 | ❓ (ikke verificeret) |
+| Kode dokumentation / PEP8 | ✅ (ikke verificeret) |
 | Data versionering (DVC + MinIO) | ✅ `.dvc/config` opsat |
 | Konfigurationsfil (`config.yaml`) | ✅ `configs/config.yaml` |
-| Hyperparametre indlæses fra config | ❓ (ikke verificeret) Men filen er lavet|
+| Hyperparametre indlæses fra config | ✅ (ikke verificeret) Men filen er lavet|
 
 **Modul 1: ~6/8 verificeret**
 
@@ -31,7 +31,7 @@
 | MLFlow / WandB lineage | ✅ MLFlow logging tilføjet i `train.py` |
 | Automatisk evaluering | ✅ Indgår i Jenkinsfile |
 | Model registry (MLFlow) | ✅ Indgår i Jenkinsfile (registrerer hvis accuracy ≥ 80%) |
-| Deploy model + log til MLFlow | ❌ |
+| Deploy model + log til MLFlow | ✅  |
 | Branch protection + auto-merge | ❌ |
 
 **Modul 2: ~10/12**

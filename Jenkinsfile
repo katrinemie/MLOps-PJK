@@ -152,6 +152,27 @@ EOF
             }
         }
 
+        // ----------------------------------------------------------------
+        // 8. DEPLOY API (Flask server)
+        // ----------------------------------------------------------------
+        stage('Deploy API') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh """
+                    docker build -f Dockerfile.serve \
+                        -t ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT} \
+                        -t ${REGISTRY}/cats-vs-dogs-api:latest \
+                        .
+                    docker push ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT}
+                    docker push ${REGISTRY}/cats-vs-dogs-api:latest
+
+                    echo " API deployed: ${REGISTRY}/cats-vs-dogs-api:latest"
+                """
+            }
+        }
+
     }
 
     post {

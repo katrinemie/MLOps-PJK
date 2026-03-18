@@ -17,6 +17,7 @@ import torch
 import torch.nn as nn
 import yaml
 from torch.utils.data import DataLoader, random_split
+from carbontracker.tracker import CarbonTracker
 
 from data_loader import (
     CatsDogsDataset,
@@ -123,10 +124,19 @@ def train_deepspeed(config, ds_config_path):
     print(f"DeepSpeed training with config: {ds_config_path}")
     print(f"Starting training for {num_epochs} epochs...")
 
+    # Initialize carbon tracker (on rank 0 only)
+    tracker = CarbonTracker(
+        epochs=num_epochs,
+        save_file_path=str(model_dir / "carbon_tracking.json")
+    ) if rank == 0 else None
+
     torch.cuda.reset_peak_memory_stats(device)
     train_start = time.time()
 
     for epoch in range(num_epochs):
+        if rank == 0:
+            tracker.epoch_start()
+
         model_engine.train()
         running_loss = 0.0
         correct = 0
@@ -155,6 +165,9 @@ def train_deepspeed(config, ds_config_path):
         epoch_time = time.time() - epoch_start
 
         if rank == 0:
+            tracker.epoch_end()
+
+        if rank == 0:
             print(
                 f"Epoch {epoch + 1}/{num_epochs} | "
                 f"Train Loss: {train_loss:.4f}, Acc: {train_acc:.2f}% | "
@@ -171,6 +184,7 @@ def train_deepspeed(config, ds_config_path):
 
     if rank == 0:
         save_model(model_engine.module, model_dir / "final_model.pt", config)
+        tracker.stop()
         print("\nTraining complete!")
         print(f"  Best validation accuracy: {best_val_acc:.2f}%")
         print(f"  Total training time: {total_time:.1f}s")
