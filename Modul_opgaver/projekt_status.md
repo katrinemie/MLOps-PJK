@@ -11,10 +11,10 @@
 | **3: Scalable Training** | 6/6 ✅ | 6/6 ✅ | Færdig (DDP+AMP testet på AI-Lab) |
 | **4: Scalable Inference** | 6/6 ✅ | 4/4 ✅ | Færdig |
 | **5: Deployment** | 3/5 ⚠️ | 2/2 ✅ | Næsten færdig |
-| **6: Monitoring** | 1/4 ⚠️ | 0/4 ❌ | Delvist startet |
+| **6: Monitoring** | 1/4 ⚠️ | 1/4 ⚠️ | Årligt estimat færdig |
 | **7: Guest Lecture** | ? | 0/1 ❌ | Materiale mangler |
 | **8: Post Deployment** | ? | 0/2 ❌ | Materiale mangler |
-| **Total** | | **19/26 (73%)** | **Bestå-krav: 75% (20/26)** |
+| **Total** | | **20/26 (77%)** | **✅ BESTÅR! (Krav: 75% = 20/26)** |
 
 ---
 
@@ -142,7 +142,7 @@
 | # | Opgave | Status | Fil/Implementering |
 |---|--------|--------|--------------------|
 | 1 | Carbontracker til carbon footprint (træning + inference) | ✅ Skrevet, ❌ utestet | `src/train.py` — CarbonTracker integreret, logger til `carbon_tracking.json` |
-| 2 | Forudsigelser for total cost (årligt/per request) | ❌ | Ikke startet |
+| 2 | Forudsigelser for total cost (årligt/per request) | ✅ | `src/cost_estimator.py` → `results/annual_cost_estimate.json` |
 | 3 | Drift detection pipeline (data/concept drift) | ❌ | Ikke startet |
 | 4 | Monitoring framework (Prometheus + Grafana) | ❌ | Ikke startet |
 
@@ -150,7 +150,7 @@
 | D-punkt | Krav | Status |
 |---------|------|--------|
 | D6.1 | Carbon footprint af træning | ❌ |
-| D6.2 | Årligt CO₂-estimat for use case | ❌ |
+| D6.2 | Årligt CO₂-estimat for use case | ✅ |
 | D6.3 | Drift detection + mitigering | ❌ |
 | D6.4 | Screenshot af monitoring dashboard | ❌ |
 
