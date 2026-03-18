@@ -1,0 +1,6 @@
+outs:
+- md5: 8257506f294e5f519e30dd3b83b95b9a.dir
+  size: 866196888
+  nfiles: 25003
+  hash: md5
+  path: PetImages

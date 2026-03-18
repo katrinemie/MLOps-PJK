@@ -1,0 +1,42 @@
+[
+  {
+    "label": "1GPU_noAMP",
+    "gpus": 1,
+    "amp": false,
+    "epochs": 3,
+    "total_time_s": 97.9,
+    "per_epoch_s": 32.6,
+    "peak_vram_mb": 860.0,
+    "val_acc": 96.1
+  },
+  {
+    "label": "1GPU_AMP",
+    "gpus": 1,
+    "amp": true,
+    "epochs": 3,
+    "total_time_s": 96.6,
+    "per_epoch_s": 32.2,
+    "peak_vram_mb": 574.0,
+    "val_acc": 93.8
+  },
+  {
+    "label": "2GPU_noAMP",
+    "gpus": 2,
+    "amp": false,
+    "epochs": 3,
+    "total_time_s": 62.8,
+    "per_epoch_s": 20.9,
+    "peak_vram_mb": 903.0,
+    "val_acc": 96.3
+  },
+  {
+    "label": "2GPU_AMP",
+    "gpus": 2,
+    "amp": true,
+    "epochs": 3,
+    "total_time_s": 62.2,
+    "per_epoch_s": 20.7,
+    "peak_vram_mb": 617.0,
+    "val_acc": 95.3
+  }
+]
