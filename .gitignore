@@ -1,6 +1,7 @@
 # Data
 creditcard.csv
 /data
+!data/raw/PetImages.dvc
 
 # Virtual environment
 .venv
