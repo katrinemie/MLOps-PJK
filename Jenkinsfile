@@ -107,7 +107,19 @@ pipeline {
         }
 
         // ----------------------------------------------------------------
-        // 7. REGISTRER MODEL I MLFLOW (kun hvis accuracy >= MIN_ACCURACY)
+        // 7. QUANTIZE MODEL (FP32 -> INT8)
+        // ----------------------------------------------------------------
+        stage('Quantize') {
+            steps {
+                sh '''
+                    . venv/bin/activate
+                    python src/quantize_benchmark.py
+                '''
+            }
+        }
+
+        // ----------------------------------------------------------------
+        // 8. REGISTRER MODEL I MLFLOW (kun hvis accuracy >= MIN_ACCURACY)
         // ----------------------------------------------------------------
         stage('Register Model') {
             when {

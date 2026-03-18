@@ -2,91 +2,91 @@
   "fp32": [
     {
       "batch_size": 1,
-      "total_ms": 16.38,
-      "latency_per_image_ms": 16.38,
-      "throughput_fps": 61.1
+      "total_ms": 15.76,
+      "latency_per_image_ms": 15.76,
+      "throughput_fps": 63.4
     },
     {
       "batch_size": 2,
-      "total_ms": 19.45,
-      "latency_per_image_ms": 9.72,
-      "throughput_fps": 102.8
+      "total_ms": 19.83,
+      "latency_per_image_ms": 9.91,
+      "throughput_fps": 100.9
     },
     {
       "batch_size": 4,
-      "total_ms": 31.52,
-      "latency_per_image_ms": 7.88,
-      "throughput_fps": 126.9
+      "total_ms": 19.98,
+      "latency_per_image_ms": 5.0,
+      "throughput_fps": 200.2
     },
     {
       "batch_size": 8,
-      "total_ms": 58.52,
-      "latency_per_image_ms": 7.32,
-      "throughput_fps": 136.7
+      "total_ms": 25.92,
+      "latency_per_image_ms": 3.24,
+      "throughput_fps": 308.6
     },
     {
       "batch_size": 16,
-      "total_ms": 93.67,
-      "latency_per_image_ms": 5.85,
-      "throughput_fps": 170.8
+      "total_ms": 45.69,
+      "latency_per_image_ms": 2.86,
+      "throughput_fps": 350.2
     },
     {
       "batch_size": 32,
-      "total_ms": 219.7,
-      "latency_per_image_ms": 6.87,
-      "throughput_fps": 145.7
+      "total_ms": 129.17,
+      "latency_per_image_ms": 4.04,
+      "throughput_fps": 247.7
     },
     {
       "batch_size": 64,
-      "total_ms": 2033.45,
-      "latency_per_image_ms": 31.77,
-      "throughput_fps": 31.5
+      "total_ms": 402.3,
+      "latency_per_image_ms": 6.29,
+      "throughput_fps": 159.1
     }
   ],
   "int8": [
     {
       "batch_size": 1,
-      "total_ms": 15.01,
-      "latency_per_image_ms": 15.01,
-      "throughput_fps": 66.6
+      "total_ms": 4.86,
+      "latency_per_image_ms": 4.86,
+      "throughput_fps": 205.8
     },
     {
       "batch_size": 2,
-      "total_ms": 19.97,
-      "latency_per_image_ms": 9.99,
-      "throughput_fps": 100.1
+      "total_ms": 7.74,
+      "latency_per_image_ms": 3.87,
+      "throughput_fps": 258.5
     },
     {
       "batch_size": 4,
-      "total_ms": 27.26,
-      "latency_per_image_ms": 6.82,
-      "throughput_fps": 146.7
+      "total_ms": 14.58,
+      "latency_per_image_ms": 3.65,
+      "throughput_fps": 274.3
     },
     {
       "batch_size": 8,
-      "total_ms": 48.96,
-      "latency_per_image_ms": 6.12,
-      "throughput_fps": 163.4
+      "total_ms": 9.57,
+      "latency_per_image_ms": 1.2,
+      "throughput_fps": 836.1
     },
     {
       "batch_size": 16,
-      "total_ms": 89.76,
-      "latency_per_image_ms": 5.61,
-      "throughput_fps": 178.3
+      "total_ms": 13.53,
+      "latency_per_image_ms": 0.85,
+      "throughput_fps": 1182.7
     },
     {
       "batch_size": 32,
-      "total_ms": 291.37,
-      "latency_per_image_ms": 9.11,
-      "throughput_fps": 109.8
+      "total_ms": 21.14,
+      "latency_per_image_ms": 0.66,
+      "throughput_fps": 1513.6
     },
     {
       "batch_size": 64,
-      "total_ms": 2072.67,
-      "latency_per_image_ms": 32.39,
-      "throughput_fps": 30.9
+      "total_ms": 47.4,
+      "latency_per_image_ms": 0.74,
+      "throughput_fps": 1350.3
     }
   ],
   "saturation_batch_size": 16,
-  "peak_throughput_fps": 170.8
+  "peak_throughput_fps": 350.2
 }
