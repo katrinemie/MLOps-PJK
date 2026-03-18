@@ -14,12 +14,15 @@ with open(results_file) as f:
 print("\n" + "=" * 65)
 print("MODULE 3: Scalable Training Results")
 print("=" * 65)
-print(f"{'Config':<20} {'GPUs':>5} {'AMP':>5} {'Time(s)':>8} {'Epoch(s)':>9} {'VRAM(MB)':>9} {'Acc':>6}")
-print("-" * 65)
+hdr = f"{'Config':<18} {'GPUs':>4} {'AMP':>4} {'Time':>7} {'Epoch':>7} {'VRAM':>7} {'Acc':>6}"
+print(hdr)
+print("-" * len(hdr))
 
 for r in results:
-    print(f"{r['label']:<20} {r['gpus']:>5} {'Yes' if r['amp'] else 'No':>5} "
-          f"{r['total_time_s']:>8.1f} {r['per_epoch_s']:>9.1f} {r['peak_vram_mb']:>9.0f} {r['val_acc']:>5.1f}%")
+    amp = "Yes" if r['amp'] else "No"
+    print(f"{r['label']:<18} {r['gpus']:>4} {amp:>4} "
+          f"{r['total_time_s']:>7.1f} {r['per_epoch_s']:>7.1f} "
+          f"{r['peak_vram_mb']:>7.0f} {r['val_acc']:>5.1f}%")
 
 # Speedup calculations
 if len(results) >= 2:
