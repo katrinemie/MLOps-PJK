@@ -64,16 +64,14 @@ pipeline {
         }
 
         // ----------------------------------------------------------------
-        // 4. HENT DATA (DVC)
+        // 4. HENT DATA
         // ----------------------------------------------------------------
         stage('Fetch Data') {
             steps {
                 sh '''
-                    . venv/bin/activate
-                    pip install --quiet dvc dvc-s3
-                    dvc remote modify --local minio access_key_id daki
-                    dvc remote modify --local minio secret_access_key dakiminio
-                    dvc pull
+                    mkdir -p data/raw
+                    ln -sf /home/daki/PetImages data/raw/PetImages
+                    echo "Data klar: $(ls data/raw/PetImages | wc -l) filer i Cat+Dog"
                 '''
             }
         }
