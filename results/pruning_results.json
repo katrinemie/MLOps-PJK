@@ -1,10 +1,10 @@
 {
-  "model": "ResNet18 (ImageNet pretrained, 1000 classes)",
+  "model": "ResNet18 (ImageNet, 1000 classes)",
   "test_samples": 200,
   "metric": "prediction_agreement_with_unpruned_model",
   "pruning_results": [
     {
-      "pruning_pct": 0.0,
+      "pruning_pct": 0,
       "sparsity": 0.0,
       "prediction_agreement": 100.0,
       "prediction_drop": 0.0
