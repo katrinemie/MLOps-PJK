@@ -1,18 +1,18 @@
 {
   "model": "ResNet18",
-  "num_parameters": 11177538,
+  "quantization": "static_ptq_fx",
   "size_fp32_mb": 42.71,
-  "size_int8_mb": 42.71,
-  "size_reduction_pct": 0.0,
-  "batch1": {
-    "fp32_ms": 15.8,
-    "int8_ms": 14.19,
-    "speedup": 1.11
+  "size_int8_mb": 10.78,
+  "size_reduction_pct": 74.8,
+  "cpu_batch1": {
+    "fp32_ms": 15.33,
+    "int8_ms": 6.4,
+    "speedup": 2.4
   },
-  "batch32": {
-    "fp32_ms": 216.07,
-    "int8_ms": 228.21,
-    "speedup": 0.95
+  "cpu_batch32": {
+    "fp32_ms": 163.82,
+    "int8_ms": 25.92,
+    "speedup": 6.32
   },
-  "prediction_agreement_pct": 100.0
+  "prediction_agreement_pct": 98.0
 }
