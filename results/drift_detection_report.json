@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-03-18T12:08:07.305435",
+  "summary": {
+    "data_drift_detected": false,
+    "concept_drift_detected": true,
+    "overall_drift_status": "ALERT"
+  },
+  "data_drift": {
+    "timestamp": "2026-03-18T12:08:07.302822",
+    "drift_detected": false,
+    "features_with_drift": [],
+    "feature_details": {
+      "sepal length (cm)": {
+        "ks_statistic": 0.066667,
+        "p_value": 0.894321,
+        "drift_detected": false,
+        "baseline_mean": 5.8433,
+        "current_mean": 5.8915,
+        "baseline_std": 0.8253,
+        "current_std": 0.9014
+      },
+      "sepal width (cm)": {
+        "ks_statistic": 0.126667,
+        "p_value": 0.180395,
+        "drift_detected": false,
+        "baseline_mean": 3.0573,
+        "current_mean": 3.0529,
+        "baseline_std": 0.4344,
+        "current_std": 0.5151
+      },
+      "petal length (cm)": {
+        "ks_statistic": 0.086667,
+        "p_value": 0.627917,
+        "drift_detected": false,
+        "baseline_mean": 3.758,
+        "current_mean": 3.7272,
+        "baseline_std": 1.7594,
+        "current_std": 1.7927
+      },
+      "petal width (cm)": {
+        "ks_statistic": 0.106667,
+        "p_value": 0.361727,
+        "drift_detected": false,
+        "baseline_mean": 1.1993,
+        "current_mean": 1.2289,
+        "baseline_std": 0.7597,
+        "current_std": 0.8116
+      }
+    }
+  },
+  "concept_drift": {
+    "timestamp": "2026-03-18T12:08:07.305425",
+    "baseline_accuracy": 0.95,
+    "current_accuracy": 0.87,
+    "accuracy_drop": 0.08,
+    "accuracy_drop_percentage": 8.0,
+    "threshold": 0.05,
+    "drift_detected": true,
+    "severity": "moderate",
+    "recommendation": "Monitor closely, consider retraining"
+  },
+  "mitigations": [
+    "CONCEPT DRIFT (MODERATE): Monitor and retrain if continues",
+    "CONCEPT DRIFT: Accuracy dropped 8.0% (from 95.0% to 87.0%)"
+  ]
+}
