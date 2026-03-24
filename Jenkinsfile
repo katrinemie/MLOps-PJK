@@ -71,7 +71,9 @@ pipeline {
                 sh '''
                     mkdir -p data/raw
                     ln -sf /home/daki/PetImages data/raw/PetImages
-                    echo "Data klar: $(ls data/raw/PetImages | wc -l) filer i Cat+Dog"
+                    test -d data/raw/PetImages/Cat || { echo "ERROR: data/raw/PetImages/Cat not found - check /home/daki/PetImages"; exit 1; }
+                    test -d data/raw/PetImages/Dog || { echo "ERROR: data/raw/PetImages/Dog not found - check /home/daki/PetImages"; exit 1; }
+                    echo "Data klar: Cat=$(ls data/raw/PetImages/Cat | wc -l), Dog=$(ls data/raw/PetImages/Dog | wc -l)"
                 '''
             }
         }
