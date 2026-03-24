@@ -2,7 +2,6 @@
 Generates and logs a model card to MLflow as a markdown artifact.
 """
 
-import mlflow
 from pathlib import Path
 
 
@@ -105,5 +104,5 @@ def log_model_card(config: dict, metrics: dict = None, output_dir: str = ".") ->
     card_path = Path(output_dir) / "model_card.md"
     card_path.write_text(card_content, encoding="utf-8")
 
-    mlflow.log_artifact(str(card_path))
+    # mlflow.log_artifact(str(card_path))
     print(f"Model card logged to MLflow: {card_path}")
