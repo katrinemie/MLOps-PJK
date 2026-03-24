@@ -140,7 +140,7 @@ def train(config: dict) -> None:
     model_dir.mkdir(parents=True, exist_ok=True)
 
     mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "http://172.24.198.42:5050"))
-    mlflow.set_experiment("cats-vs-dogs")
+    mlflow.set_experiment("cats-vs-dogs-v2")
 
     # Initialize carbon tracker
     tracker = CarbonTracker(
