@@ -158,7 +158,7 @@ import mlflow
 mlflow.set_tracking_uri("${MLFLOW_URI}")
 
 client = mlflow.tracking.MlflowClient()
-experiment = client.get_experiment_by_name("cats-vs-dogs")
+experiment = client.get_experiment_by_name("cats-vs-dogs-v2")
 if experiment:
     runs = client.search_runs(
         experiment.experiment_id,
