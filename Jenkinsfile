@@ -152,6 +152,7 @@ pipeline {
                 )]) {
                     sh """
                         . venv/bin/activate
+                        MLFLOW_S3_ENDPOINT_URL=http://172.24.198.42:9000 \
                         python - <<'EOF'
 import mlflow
 
@@ -170,7 +171,9 @@ if experiment:
         acc = run.data.metrics.get("best_val_acc", 0.0)
         print(f"Seneste run best_val_acc: {acc:.4f}")
         if acc >= float("${MIN_ACCURACY}"):
-            print(f"Model godkendt (best_val_acc={acc:.4f}) - klar til deploy")
+            model_uri = f"runs:/{run.info.run_id}/model"
+            result = mlflow.register_model(model_uri, "cats-vs-dogs-model")
+            print(f"Model registreret: version {result.version}")
         else:
             print(f"Accuracy {acc:.4f} under threshold ${MIN_ACCURACY} - model ikke registreret")
             exit(1)
