@@ -195,11 +195,11 @@ def train(config: dict) -> None:
 
         # Stop carbon tracker and log results
         tracker.stop()
-        mlflow.log_artifact(str(model_dir / "carbon_tracking.json"))
+        # mlflow.log_artifact(str(model_dir / "carbon_tracking.json"))  # noqa: E501
 
         # Log slutresultat og gem modelfil som artifact
         mlflow.log_metric("best_val_acc", best_val_acc)
-        mlflow.log_artifact(str(model_dir / "best_model.pt"))
+        # mlflow.log_artifact(str(model_dir / "best_model.pt"))  # noqa: E501
 
         # Generer og log model card som artifact
         log_model_card(
