@@ -144,8 +144,7 @@ def train(config: dict) -> None:
 
     # Initialize carbon tracker
     tracker = CarbonTracker(
-        epochs=config["training"]["epochs"],
-        save_file_path=str(model_dir / "carbon_tracking.json")
+        epochs=config["training"]["epochs"]
     )
 
     with mlflow.start_run():
