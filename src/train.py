@@ -202,11 +202,8 @@ def train(config: dict) -> None:
                 print("\n=== Carbon Footprint ===")
                 print(json.dumps(json.load(f), indent=2))
                 print("=======================\n")
-        mlflow.log_artifact(str(carbon_file))
-
-        # Log slutresultat og gem modelfil som artifact
+        # Log slutresultat
         mlflow.log_metric("best_val_acc", best_val_acc)
-        mlflow.log_artifact(str(model_dir / "best_model.pt"))
 
         # Generer og log model card som artifact
         log_model_card(
