@@ -88,11 +88,18 @@ pipeline {
         // ----------------------------------------------------------------
         stage('Train') {
             steps {
-                sh '''
-                    . venv/bin/activate
-                    MLFLOW_TRACKING_URI=${MLFLOW_URI} \
-                    python src/train.py --config configs/config.yaml
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'minio-credentials',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY' // pragma: allowlist secret
+                )]) {
+                    sh '''
+                        . venv/bin/activate
+                        MLFLOW_TRACKING_URI=${MLFLOW_URI} \
+                        MLFLOW_S3_ENDPOINT_URL=http://172.24.198.42:9000 \
+                        python src/train.py --config configs/config.yaml
+                    '''
+                }
             }
         }
 
@@ -101,13 +108,20 @@ pipeline {
         // ----------------------------------------------------------------
         stage('Evaluate') {
             steps {
-                sh '''
-                    . venv/bin/activate
-                    MLFLOW_TRACKING_URI=${MLFLOW_URI} \
-                    python src/evaluate.py \
-                        --config configs/config.yaml \
-                        --model models/best_model.pt
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'minio-credentials',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY' // pragma: allowlist secret
+                )]) {
+                    sh '''
+                        . venv/bin/activate
+                        MLFLOW_TRACKING_URI=${MLFLOW_URI} \
+                        MLFLOW_S3_ENDPOINT_URL=http://172.24.198.42:9000 \
+                        python src/evaluate.py \
+                            --config configs/config.yaml \
+                            --model models/best_model.pt
+                    '''
+                }
             }
         }
 
@@ -131,18 +145,20 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh """
-                    . venv/bin/activate
-                    python - <<'EOF'
+                withCredentials([usernamePassword(
+                    credentialsId: 'minio-credentials',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY' // pragma: allowlist secret
+                )]) {
+                    sh """
+                        . venv/bin/activate
+                        python - <<'EOF'
 import mlflow
-import glob, torch, yaml
+import mlflow.pytorch
+import torch
 
 mlflow.set_tracking_uri("${MLFLOW_URI}")
 
-with open("configs/config.yaml") as f:
-    import yaml; cfg = yaml.safe_load(f)
-
-# Find seneste MLFlow run og tjek accuracy
 client = mlflow.tracking.MlflowClient()
 experiment = client.get_experiment_by_name("cats-vs-dogs")
 if experiment:
@@ -156,8 +172,11 @@ if experiment:
         acc = run.data.metrics.get("best_val_acc", 0.0)
         print(f"Seneste run best_val_acc: {acc:.4f}")
         if acc >= float("${MIN_ACCURACY}"):
+            model = torch.load("models/best_model.pt", map_location="cpu")
+            with mlflow.start_run(run_id=run.info.run_id):
+                mlflow.pytorch.log_model(model, "best_model")
             mlflow.register_model(
-                f"runs:/{run.info.run_id}/best_model.pt",
+                f"runs:/{run.info.run_id}/best_model",
                 "cats-vs-dogs-model"
             )
             print(f"Model registreret i MLFlow (best_val_acc={acc:.4f})")
@@ -165,7 +184,8 @@ if experiment:
             print(f"Accuracy {acc:.4f} under threshold ${MIN_ACCURACY} - model ikke registreret")
             exit(1)
 EOF
-                """
+                    """
+                }
             }
         }
 
