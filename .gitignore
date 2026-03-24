@@ -1,7 +1,9 @@
 # Data (DVC styrer data/ via egne .gitignore-filer)
-data/
-creditcard.csv
+data/*
+!data/raw/
+data/raw/*
 !data/raw/PetImages.dvc
+creditcard.csv
 
 # Virtual environment
 .venv

@@ -10,7 +10,7 @@ import mlflow
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.cuda.amp import GradScaler, autocast
+from torch.amp import GradScaler, autocast
 import yaml
 from tqdm import tqdm
 from carbontracker.tracker import CarbonTracker
@@ -133,7 +133,7 @@ def train(config: dict) -> None:
 
     # AMP: enable when running on CUDA
     use_amp = device.type == "cuda"
-    scaler = GradScaler() if use_amp else None
+    scaler = GradScaler("cuda") if use_amp else None
     print(f"Automatic Mixed Precision (AMP): {'ON' if use_amp else 'OFF'}")
 
     model_dir = Path(config["output"]["model_dir"])
@@ -144,8 +144,7 @@ def train(config: dict) -> None:
 
     # Initialize carbon tracker
     tracker = CarbonTracker(
-        epochs=config["training"]["epochs"],
-        save_file_path=str(model_dir / "carbon_tracking.json")
+        epochs=config["training"]["epochs"]
     )
 
     with mlflow.start_run():
