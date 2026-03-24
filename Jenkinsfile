@@ -68,13 +68,18 @@ pipeline {
         // ----------------------------------------------------------------
         stage('Fetch Data') {
             steps {
-                sh '''
-                    mkdir -p data/raw
-                    ln -sf /home/daki/PetImages data/raw/PetImages
-                    test -d data/raw/PetImages/Cat || { echo "ERROR: data/raw/PetImages/Cat not found - check /home/daki/PetImages"; exit 1; }
-                    test -d data/raw/PetImages/Dog || { echo "ERROR: data/raw/PetImages/Dog not found - check /home/daki/PetImages"; exit 1; }
-                    echo "Data klar: Cat=$(ls data/raw/PetImages/Cat | wc -l), Dog=$(ls data/raw/PetImages/Dog | wc -l)"
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'minio-credentials',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY' // pragma: allowlist secret
+                )]) {
+                    sh '''
+                        . venv/bin/activate
+                        pip install --quiet 'dvc[s3]'
+                        dvc pull data/raw/PetImages.dvc
+                        echo "Data klar: Cat=$(ls data/raw/PetImages/Cat | wc -l), Dog=$(ls data/raw/PetImages/Dog | wc -l)"
+                    '''
+                }
             }
         }
 
