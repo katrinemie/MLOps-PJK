@@ -154,8 +154,6 @@ pipeline {
                         . venv/bin/activate
                         python - <<'EOF'
 import mlflow
-import mlflow.pytorch
-import torch
 
 mlflow.set_tracking_uri("${MLFLOW_URI}")
 
@@ -172,14 +170,7 @@ if experiment:
         acc = run.data.metrics.get("best_val_acc", 0.0)
         print(f"Seneste run best_val_acc: {acc:.4f}")
         if acc >= float("${MIN_ACCURACY}"):
-            model = torch.load("models/best_model.pt", map_location="cpu")
-            with mlflow.start_run(run_id=run.info.run_id):
-                mlflow.pytorch.log_model(model, "best_model")
-            mlflow.register_model(
-                f"runs:/{run.info.run_id}/best_model",
-                "cats-vs-dogs-model"
-            )
-            print(f"Model registreret i MLFlow (best_val_acc={acc:.4f})")
+            print(f"Model godkendt (best_val_acc={acc:.4f}) - klar til deploy")
         else:
             print(f"Accuracy {acc:.4f} under threshold ${MIN_ACCURACY} - model ikke registreret")
             exit(1)
