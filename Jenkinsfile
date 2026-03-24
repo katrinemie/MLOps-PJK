@@ -202,8 +202,8 @@ model_name = "cats-vs-dogs-model"
 # Hent seneste version af den registrerede model
 versions = client.search_model_versions(f"name='{model_name}'")
 if not versions:
-    print(f"Ingen registrerede versioner af {model_name} - afbryder deploy")
-    exit(1)
+    print(f"Ingen registrerede versioner af {model_name} - springer deploy over")
+    exit(0)
 
 latest = sorted(versions, key=lambda v: int(v.version))[-1]
 version = latest.version
