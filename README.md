@@ -152,3 +152,5 @@ git push -u origin feature/mit-feature
 
 # Merge til main via PR på GitHub
 ```
+
+Run
