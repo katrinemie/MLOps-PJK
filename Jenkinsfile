@@ -152,6 +152,7 @@ pipeline {
                 )]) {
                     sh """
                         . venv/bin/activate
+                        MLFLOW_S3_ENDPOINT_URL=http://172.24.198.42:9000 \
                         python - <<'EOF'
 import mlflow
 
@@ -170,7 +171,9 @@ if experiment:
         acc = run.data.metrics.get("best_val_acc", 0.0)
         print(f"Seneste run best_val_acc: {acc:.4f}")
         if acc >= float("${MIN_ACCURACY}"):
-            print(f"Model godkendt (best_val_acc={acc:.4f}) - klar til deploy")
+            model_uri = f"runs:/{run.info.run_id}/model"
+            result = mlflow.register_model(model_uri, "cats-vs-dogs-model")
+            print(f"Model registreret: version {result.version}")
         else:
             print(f"Accuracy {acc:.4f} under threshold ${MIN_ACCURACY} - model ikke registreret")
             exit(1)
@@ -245,16 +248,36 @@ EOF
                 branch 'main'
             }
             steps {
-                sh """
-                    docker build -f Dockerfile.serve \
-                        -t ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT} \
-                        -t ${REGISTRY}/cats-vs-dogs-api:latest \
-                        .
-                    docker push ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT}
-                    docker push ${REGISTRY}/cats-vs-dogs-api:latest
+                withCredentials([usernamePassword(
+                    credentialsId: 'minio-credentials',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY' // pragma: allowlist secret
+                )]) {
+                    sh """
+                        docker build -f Dockerfile.serve \
+                            -t ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT} \
+                            -t ${REGISTRY}/cats-vs-dogs-api:latest \
+                            .
+                        docker push ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT}
+                        docker push ${REGISTRY}/cats-vs-dogs-api:latest
 
-                    echo " API deployed: ${REGISTRY}/cats-vs-dogs-api:latest"
-                """
+                        which sshpass || sudo apt-get install -y -q sshpass
+                        sshpass -p 'daki' ssh -o StrictHostKeyChecking=no daki@172.24.198.42 \
+                            "docker stop cats-vs-dogs-api 2>/dev/null || true && \
+                             docker rm cats-vs-dogs-api 2>/dev/null || true && \
+                             docker run -d \
+                                --name cats-vs-dogs-api \
+                                -p 5001:5000 \
+                                -e MLFLOW_TRACKING_URI=http://172.24.198.42:5050 \
+                                -e MLFLOW_S3_ENDPOINT_URL=http://172.24.198.42:9000 \
+                                -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+                                -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+                                --restart unless-stopped \
+                                localhost:5000/cats-vs-dogs-api:latest"
+
+                        echo "API deployed on http://172.24.198.42:5001"
+                    """
+                }
             }
         }
 
