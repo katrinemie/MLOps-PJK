@@ -16,7 +16,7 @@ from tqdm import tqdm
 from carbontracker.tracker import CarbonTracker
 
 from data_loader import create_data_loaders
-from model import create_model, save_model
+from model import create_model, load_model, save_model
 from model_card import log_model_card
 
 
@@ -140,7 +140,13 @@ def train(config: dict) -> None:
     model_dir.mkdir(parents=True, exist_ok=True)
 
     mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "http://172.24.198.42:5050"))
-    mlflow.set_experiment("cats-vs-dogs-v2")
+    experiment_name = "cats-vs-dogs-v2"
+    if mlflow.get_experiment_by_name(experiment_name) is None:
+        mlflow.create_experiment(
+            experiment_name,
+            artifact_location="s3://pkj-catdog/mlflow-artifacts",
+        )
+    mlflow.set_experiment(experiment_name)
 
     # Initialize carbon tracker
     tracker = CarbonTracker(
@@ -192,6 +198,10 @@ def train(config: dict) -> None:
                 save_model(model, model_dir / "best_model.pt", config)
 
         save_model(model, model_dir / "final_model.pt", config)
+
+        # Log best model to MLflow artifact store (MinIO)
+        best_model = load_model(str(model_dir / "best_model.pt"), config)
+        mlflow.pytorch.log_model(best_model, "model")
 
         # Stop carbon tracker and log results
         tracker.stop()
