@@ -261,7 +261,7 @@ EOF
                         docker push ${REGISTRY}/cats-vs-dogs-api:${GIT_COMMIT}
                         docker push ${REGISTRY}/cats-vs-dogs-api:latest
 
-                        which sshpass || sudo apt-get install -y -q sshpass
+                        which sshpass || apt-get install -y -q sshpass
                         sshpass -p 'daki' ssh -o StrictHostKeyChecking=no daki@172.24.198.42 \
                             "docker stop cats-vs-dogs-api 2>/dev/null || true && \
                              docker rm cats-vs-dogs-api 2>/dev/null || true && \
