@@ -11,6 +11,7 @@ venv/
 
 # IDE/Editor
 .claude
+CLAUDE.md
 .idea/
 .vscode/
 *.swp
